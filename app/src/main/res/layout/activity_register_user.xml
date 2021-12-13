@@ -4,93 +4,77 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".RegisterUser">
 
     <TextView
-        android:id="@+id/banner"
+        android:id="@+id/banner2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="My Fitness App"
-        android:textSize="50sp"
-        android:textAlignment="center"
-        android:textStyle="bold"
-        android:fontFamily="sans-serif-black"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginTop="50dp"
-        />
+        android:fontFamily="sans-serif-black"
+        android:text="My Fitness App"
+        android:textAlignment="center"
+        android:textSize="50sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/fullName"
         android:layout_width="380dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Full Name"
+        android:textSize="24sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/banner2" />
+
+    <EditText
+        android:id="@+id/newUserPassword"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:ems="10"
         android:inputType="textPassword"
-        android:text="Password"
+        android:hint="Password"
         android:textSize="24sp"
-        android:layout_marginTop="60dp"
-        app:layout_constraintHorizontal_bias="0.516"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailAddress" />
+        app:layout_constraintTop_toBottomOf="@id/email" />
 
     <EditText
-        android:id="@+id/emailAddress"
+        android:id="@+id/email"
         android:layout_width="380dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="20dp"
         android:ems="10"
+        android:hint="Email"
         android:inputType="textEmailAddress"
-        android:text="Email Address"
         android:textSize="24sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/banner" />
+        app:layout_constraintTop_toBottomOf="@id/fullName" />
 
     <Button
         android:id="@+id/login"
         android:layout_width="380dp"
         android:layout_height="70dp"
         android:layout_marginTop="30dp"
-        android:layout_marginRight="16dp"
         android:backgroundTint="#4a5cff"
-        android:text="Login"
+        android:text="Register User"
         android:textColor="#ffffff"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password" />
-
-    <TextView
-        android:id="@+id/forgotPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Forgot Password?"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/login"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="50dp"
-        />
-
-    <TextView
-        android:id="@+id/register"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Register"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="@+id/forgotPassword"
-        app:layout_constraintLeft_toRightOf="@+id/forgotPassword"
-        android:layout_marginLeft="80dp"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/newUserPassword" />
 
     <ProgressBar
-        android:id="@+id/progressBar"
+        android:id="@+id/progressBar2"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -100,6 +84,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        />
+        app:layout_constraintRight_toRightOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
