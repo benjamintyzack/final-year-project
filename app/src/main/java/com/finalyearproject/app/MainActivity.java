@@ -1,8 +1,8 @@
 package com.finalyearproject.app;
 
-import static android.view.View.*;
-
-import androidx.appcompat.app.AppCompatActivity;
+import static android.view.View.GONE;
+import static android.view.View.OnClickListener;
+import static android.view.View.VISIBLE;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +14,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements OnClickListener {
 
@@ -83,6 +86,11 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         mAuth.signInWithEmailAndPassword(email,password)
                 .addOnCompleteListener(task -> {
                     if(task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        if (!user.isEmailVerified()) {
+                            user.sendEmailVerification();
+                            Toast.makeText(MainActivity.this, "Check your email to verify account", Toast.LENGTH_LONG).show();
+                        }
                         startActivity(new Intent(this, WorkoutPage.class));
                     }else {
                         Toast.makeText(MainActivity.this, "Failed to login, please try again", Toast.LENGTH_LONG).show();

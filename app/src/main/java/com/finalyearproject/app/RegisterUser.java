@@ -1,9 +1,8 @@
 package com.finalyearproject.app;
 
-import static android.view.View.*;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import static android.view.View.GONE;
+import static android.view.View.OnClickListener;
+import static android.view.View.VISIBLE;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,10 +14,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.AuthResult;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -110,12 +107,12 @@ public class RegisterUser extends AppCompatActivity implements OnClickListener{
                                         Toast.makeText(RegisterUser.this, "User has been registered successfully", Toast.LENGTH_LONG).show();
                                         startActivity(new Intent(this, MainActivity.class));
                                     }else {
-                                        Toast.makeText(RegisterUser.this, "Failed to register user 1", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(RegisterUser.this, "Failed to register user", Toast.LENGTH_LONG).show();
                                     }
                             progressBar.setVisibility(GONE);
                         });
                     }else {
-                        Toast.makeText(RegisterUser.this, "Failed to register user 2", Toast.LENGTH_LONG).show();
+                        Toast.makeText(RegisterUser.this, "Failed to authenticate user. Please try again", Toast.LENGTH_LONG).show();
                         progressBar.setVisibility(GONE);
                     }
                 });
