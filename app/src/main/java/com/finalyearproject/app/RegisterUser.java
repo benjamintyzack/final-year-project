@@ -1,5 +1,7 @@
 package com.finalyearproject.app;
 
+import static android.view.View.*;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,9 +22,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class RegisterUser extends AppCompatActivity implements View.OnClickListener{
+public class RegisterUser extends AppCompatActivity implements OnClickListener{
 
-    private TextView banner2, login;
+    private TextView banner2, register;
     private EditText editTextFullName, editTextEmail, editTextPassword;
     private ProgressBar progressBar;
 
@@ -38,8 +40,8 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
         banner2 = (TextView) findViewById(R.id.banner2);
         banner2.setOnClickListener(this);
 
-        login = (Button) findViewById(R.id.login);
-        login.setOnClickListener(this);
+        register = (Button) findViewById(R.id.register);
+        register.setOnClickListener(this);
 
         editTextFullName = (EditText) findViewById(R.id.fullName);
         editTextEmail = (EditText) findViewById(R.id.email);
@@ -54,7 +56,7 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
             case R.id.banner2:
                 startActivity(new Intent(this, MainActivity.class));
                 break;
-            case R.id.login:
+            case R.id.register:
                 registerUser();
                 break;
         }
@@ -95,7 +97,7 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        progressBar.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(VISIBLE);
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if(task.isSuccessful()) {
@@ -106,14 +108,15 @@ public class RegisterUser extends AppCompatActivity implements View.OnClickListe
                                 .setValue(user).addOnCompleteListener(task1 -> {
                                     if(task1.isSuccessful()){
                                         Toast.makeText(RegisterUser.this, "User has been registered successfully", Toast.LENGTH_LONG).show();
+                                        startActivity(new Intent(this, MainActivity.class));
                                     }else {
                                         Toast.makeText(RegisterUser.this, "Failed to register user 1", Toast.LENGTH_LONG).show();
                                     }
-                            progressBar.setVisibility(View.GONE);
+                            progressBar.setVisibility(GONE);
                         });
                     }else {
                         Toast.makeText(RegisterUser.this, "Failed to register user 2", Toast.LENGTH_LONG).show();
-                        progressBar.setVisibility(View.GONE);
+                        progressBar.setVisibility(GONE);
                     }
                 });
     }

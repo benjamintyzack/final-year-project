@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FinalYearProject">
         <activity
+            android:name=".WorkoutPage"
+            android:exported="false" />
+        <activity
             android:name=".RegisterUser"
             android:exported="false" />
         <activity
