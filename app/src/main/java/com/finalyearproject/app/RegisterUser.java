@@ -22,7 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class RegisterUser extends AppCompatActivity implements OnClickListener{
 
     private TextView banner2, register;
-    private EditText editTextFullName, editTextEmail, editTextPassword;
+    private EditText editTextFullName, editTextEmail, editTextPassword, editConfirmPassword;
     private ProgressBar progressBar;
 
     private FirebaseAuth mAuth;
@@ -43,6 +43,7 @@ public class RegisterUser extends AppCompatActivity implements OnClickListener{
         editTextFullName = (EditText) findViewById(R.id.fullName);
         editTextEmail = (EditText) findViewById(R.id.email);
         editTextPassword = (EditText) findViewById(R.id.newUserPassword);
+        editConfirmPassword = (EditText) findViewById(R.id.confirmUserPassword);
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar2);
     }
@@ -63,6 +64,7 @@ public class RegisterUser extends AppCompatActivity implements OnClickListener{
         String email = editTextEmail.getText().toString().trim();
         String fullName = editTextFullName.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
+        String confirmPassword = editConfirmPassword.getText().toString().trim();
 
         if(fullName.isEmpty()) {
             editTextFullName.setError("Full name is required");
@@ -90,6 +92,12 @@ public class RegisterUser extends AppCompatActivity implements OnClickListener{
 
         if(password.length() < 6) {
             editTextPassword.setError("Password needs to be longer then 6 characters");
+            editTextPassword.requestFocus();
+            return;
+        }
+
+        if(!password.equals(confirmPassword)) {
+            editTextPassword.setError("Please make sure both passwords are the same");
             editTextPassword.requestFocus();
             return;
         }
