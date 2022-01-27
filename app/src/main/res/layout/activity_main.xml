@@ -23,7 +23,7 @@
 
     <EditText
         android:id="@+id/password"
-        android:layout_width="380dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPassword"
@@ -37,7 +37,7 @@
 
     <EditText
         android:id="@+id/emailAddress"
-        android:layout_width="380dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:ems="10"
@@ -50,16 +50,15 @@
 
     <Button
         android:id="@+id/signIn"
-        android:layout_width="380dp"
+        android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginTop="28dp"
         android:backgroundTint="#4a5cff"
         android:text="Login"
         android:textColor="#ffffff"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password" />
