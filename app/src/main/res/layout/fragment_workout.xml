@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".WorkoutFragment">
+
+    <EditText
+        android:id="@+id/exercise"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:padding="10dp"
+        android:layout_marginTop="120dp"/>
+
+    <TextView
+        android:id="@+id/textRepetitions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-black"
+        android:text="Repetitions"
+        android:textAlignment="center"
+        android:textColor="#4a5cff"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginTop="300dp"/>
+
+    <EditText
+        android:id="@+id/repetitions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:minHeight="48dp"
+        android:padding="10dp"
+        android:layout_marginTop="350dp"/>
+
+    <TextView
+        android:id="@+id/textWeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-black"
+        android:text="Weight"
+        android:textAlignment="center"
+        android:textColor="#4a5cff"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginTop="200dp"/>
+
+    <TextView
+        android:id="@+id/textExercise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-black"
+        android:text="Exercise"
+        android:textAlignment="center"
+        android:textColor="#4a5cff"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginTop="90dp"/>
+
+    <EditText
+        android:id="@+id/weight"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:minHeight="48dp"
+        android:padding="10dp"
+        android:layout_marginTop="230dp"/>
+
+    <ImageView
+        android:id="@+id/button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:backgroundTint="#F9F8FA"
+        android:src="@drawable/ic_baseline_mic_24"
+        android:visibility="gone"
+        android:layout_marginTop="450dp"
+        android:layout_marginLeft="70dp"/>
+
+    <Button
+        android:id="@+id/startWorkout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#4a5cff"
+        android:text="Start Workout"
+        android:textColor="#ffffff"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginTop="400dp"
+        android:layout_marginLeft="70dp"/>
+
+    <Button
+        android:id="@+id/endWorkout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#4a5cff"
+        android:text="End Workout"
+        android:textColor="#ffffff"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:layout_marginTop="550dp"
+        android:layout_marginLeft="70dp" />
+
+    <Button
+        android:id="@+id/addExercise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#4a5cff"
+        android:text="Add Exercise"
+        android:textColor="#ffffff"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:layout_marginTop="500dp"
+        android:layout_marginLeft="70dp"/>
+
+</FrameLayout>
