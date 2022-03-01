@@ -76,7 +76,7 @@
         android:src="@drawable/ic_baseline_mic_24"
         android:visibility="gone"
         android:layout_marginTop="450dp"
-        android:layout_marginLeft="70dp"/>
+        android:layout_marginStart="70dp"/>
 
     <Button
         android:id="@+id/startWorkout"
@@ -88,7 +88,7 @@
         android:textSize="24sp"
         android:textStyle="bold"
         android:layout_marginTop="400dp"
-        android:layout_marginLeft="70dp"/>
+        android:layout_marginStart="70dp"/>
 
     <Button
         android:id="@+id/endWorkout"
@@ -101,7 +101,7 @@
         android:textStyle="bold"
         android:visibility="gone"
         android:layout_marginTop="550dp"
-        android:layout_marginLeft="70dp" />
+        android:layout_marginStart="70dp" />
 
     <Button
         android:id="@+id/addExercise"
@@ -114,6 +114,6 @@
         android:textStyle="bold"
         android:visibility="gone"
         android:layout_marginTop="500dp"
-        android:layout_marginLeft="70dp"/>
+        android:layout_marginStart="70dp"/>
 
 </FrameLayout>
