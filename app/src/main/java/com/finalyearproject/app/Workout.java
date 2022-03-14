@@ -10,7 +10,7 @@ public class Workout {
     String id;
     String userId;
     List<Exercise> exerciseList = new ArrayList<>();
-    String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+    String currentDate;
 
     public Workout() {
 

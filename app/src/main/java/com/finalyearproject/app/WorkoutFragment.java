@@ -33,7 +33,9 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -243,6 +245,7 @@ public class WorkoutFragment extends Fragment implements OnTouchListener, OnClic
         exercise.setWeightUsed(weightText.getText().toString());
         exercise.setRepsCompleted(repetitionText.getText().toString());
         exercise.setUserId(mAuth.getCurrentUser().getUid());
+        exercise.setCurrentDate(new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date()));
 
         exerciseList.add(exercise);
 
@@ -257,6 +260,7 @@ public class WorkoutFragment extends Fragment implements OnTouchListener, OnClic
         newWorkout.setId(UUID.randomUUID().toString());
         newWorkout.setUserId(mAuth.getCurrentUser().getUid());
         newWorkout.setExerciseList(exerciseList);
+        newWorkout.setCurrentDate(new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date()));
 
         FirebaseDatabase.getInstance("https://finalyearproject-e1d79-default-rtdb.europe-west1.firebasedatabase.app").getReference("Workouts")
                 .child(newWorkout.getId())

@@ -2,11 +2,25 @@ package com.finalyearproject.app;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +37,10 @@ public class HistoryFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private ListView workoutListView;
+    private ArrayAdapter<String> workoutListAdapter;
+    private List<Workout> allWorkouts = new ArrayList<>();
 
     public HistoryFragment() {
         // Required empty public constructor
@@ -58,7 +76,76 @@ public class HistoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_history, container, false);
+
+        workoutListView = view.findViewById(R.id.workoutListView);
+        readDatabase();
+        workoutListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                findWorkout(i);
+            }
+        });
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_history, container, false);
+        return view;
     }
+
+    public void readDatabase() {
+        FirebaseDatabase.getInstance("https://finalyearproject-e1d79-default-rtdb.europe-west1.firebasedatabase.app").getReference("Workouts")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        List<String> values = new ArrayList<>();
+
+                        for (DataSnapshot data: snapshot.getChildren()) {
+                            Workout workout = data.getValue(Workout.class);
+                            values.add(workout.getCurrentDate());
+                        }
+                        workoutListAdapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1,
+                                values);
+                        workoutListView.setAdapter(workoutListAdapter);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+    }
+
+    public void findWorkout(int pos) {
+        FirebaseDatabase.getInstance("https://finalyearproject-e1d79-default-rtdb.europe-west1.firebasedatabase.app").getReference("Workouts")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Workout workout = new Workout();
+
+                        for (DataSnapshot data: snapshot.getChildren()) {
+                            Workout wk = data.getValue(Workout.class);
+                            allWorkouts.add(wk);
+                        }
+                        Log.i("Workouts: ", "size " + allWorkouts.size());
+                        for (int i=0; i <= allWorkouts.size(); i++) {
+                            if (i == pos) {
+                                Log.i("Workouts: ", "size " + allWorkouts.get(i).getId());
+                                workout = allWorkouts.get(i);
+                            }
+                        }
+                        Bundle bundle = new Bundle();
+                        bundle.putString("id", workout.getId()); // Put anything what you want
+
+                        WorkoutDetailsFragment fragment = new WorkoutDetailsFragment();
+                        fragment.setArguments(bundle);
+
+                        getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+    }
+
 }
