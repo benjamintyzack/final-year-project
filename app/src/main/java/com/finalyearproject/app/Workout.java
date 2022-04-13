@@ -1,16 +1,13 @@
 package com.finalyearproject.app;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class Workout {
     String id;
     String userId;
     List<Exercise> exerciseList = new ArrayList<>();
-    String currentDate;
+    String currentDate; //Date the workout was completed, change variable name to reflect this
 
     public Workout() {
 

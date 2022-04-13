@@ -2,11 +2,30 @@ package com.finalyearproject.app;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.jjoe64.graphview.DefaultLabelFormatter;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +42,11 @@ public class ExercisesFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private Spinner exerciseSpinner;
+    private GraphView lineGraphView;
+
+    private FirebaseAuth mAuth;
 
     public ExercisesFragment() {
         // Required empty public constructor
@@ -58,7 +82,139 @@ public class ExercisesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_exercises, container, false);
+
+        exerciseSpinner = view.findViewById(R.id.exerciseSpinner);
+        lineGraphView = view.findViewById(R.id.graph);
+        lineGraphView.getViewport().setScalable(true);
+        lineGraphView.getViewport().setScrollable(true);
+
+        lineGraphView.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
+            @Override
+            public String formatLabel(double value, boolean isValueX) {
+                return super.formatLabel(value, isValueX);
+            }
+        });
+
+        mAuth = FirebaseAuth.getInstance();
+
+        getExercises();
+        exerciseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                getExerciseData();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_exercises, container, false);
+        return view;
+    }
+
+    public void getExercises() {
+        FirebaseDatabase.getInstance("https://finalyearproject-e1d79-default-rtdb.europe-west1.firebasedatabase.app").getReference("Workouts")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        List<Workout> values = new ArrayList<>();
+                        List<String> exercises = new ArrayList<>();
+
+                        for (DataSnapshot data: snapshot.getChildren()) {
+                            Workout workout = data.getValue(Workout.class);
+                            if (workout.getUserId().equals(mAuth.getUid())) {
+                                values.add(workout);
+                            }
+                        }
+                        for (Workout wk: values) {
+                            for (Exercise exercise: wk.getExerciseList()) {
+                                if (!exercises.contains(exercise.getExerciseName())) {
+                                    exercises.add(exercise.getExerciseName());
+                                }
+                            }
+
+                        }
+                        if (getActivity() != null) {
+                            ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_item, exercises);
+                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+                            exerciseSpinner.setAdapter(adapter);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+    }
+
+    public void getExerciseData() {
+        lineGraphView.removeAllSeries();
+        if(!exerciseSpinner.getSelectedItem().toString().isEmpty()) {
+            String exerciseName = exerciseSpinner.getSelectedItem().toString();
+
+            FirebaseDatabase.getInstance("https://finalyearproject-e1d79-default-rtdb.europe-west1.firebasedatabase.app").getReference("Workouts").orderByChild("currentDate")
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            List<Workout> values = new ArrayList<>();
+                            List<Exercise> exercises = new ArrayList<>();
+
+                            for (DataSnapshot data: snapshot.getChildren()) {
+                                Workout workout = data.getValue(Workout.class);
+                                if (workout.getUserId().equals(mAuth.getUid())) {
+                                    values.add(workout);
+                                }
+                            }
+                            for (Workout wk: values) {
+                                for (Exercise exercise: wk.getExerciseList()) {
+                                    if (exercise.getExerciseName().equals(exerciseName)) {
+                                        exercises.add(exercise);
+                                    }
+                                }
+                            }
+                            int x = 0;
+                            int y;
+                            int year = new Date().getYear();
+                            LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
+                            for (int i = 0; i < 12; i++) {
+                                x+=1;
+                                y= getHighestWeight(i, year, exercises);
+                                DataPoint newPoint = new DataPoint(x, y);
+                                series.appendData(newPoint, false, 12);
+                                series.setDrawDataPoints(true);
+                            }
+                            lineGraphView.addSeries(series);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+        }
+    }
+
+    public int getHighestWeight(int month, int currentYear, List<Exercise> exercises) {
+        Log.i("Exercises", "exercise" + exercises.get(0).getWeightUsed());
+        Log.i("Month", "month" + month);
+        Log.i("Year", "year" + currentYear);
+        int highestWeight = 0;
+        for (int i = 0; i < exercises.size(); i++) {
+            Date exerciseDate = new Date(Long.parseLong(exercises.get(i).getCurrentDate()) * 1000);
+            int exerciseMonth = exerciseDate.getMonth();
+            int exerciseYear = exerciseDate.getYear();
+            if(exerciseYear == currentYear) {
+                if(exerciseMonth == month) {
+                    if(Integer.parseInt(exercises.get(i).getWeightUsed()) > highestWeight) {
+                        highestWeight = Integer.parseInt(exercises.get(i).getWeightUsed());
+                    }
+                }
+            }
+        }
+        return highestWeight;
     }
 }

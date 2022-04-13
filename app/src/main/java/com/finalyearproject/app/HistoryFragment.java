@@ -13,12 +13,16 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +45,9 @@ public class HistoryFragment extends Fragment {
     private ListView workoutListView;
     private ArrayAdapter<String> workoutListAdapter;
     private List<Workout> allWorkouts = new ArrayList<>();
+    private List<String> values = new ArrayList<>();
+
+    FirebaseAuth mAuth;
 
     public HistoryFragment() {
         // Required empty public constructor
@@ -80,6 +87,8 @@ public class HistoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_history, container, false);
 
         workoutListView = view.findViewById(R.id.workoutListView);
+
+        mAuth = FirebaseAuth.getInstance();
         readDatabase();
         workoutListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -92,19 +101,25 @@ public class HistoryFragment extends Fragment {
     }
 
     public void readDatabase() {
-        FirebaseDatabase.getInstance("https://finalyearproject-e1d79-default-rtdb.europe-west1.firebasedatabase.app").getReference("Workouts")
+        FirebaseDatabase.getInstance("https://finalyearproject-e1d79-default-rtdb.europe-west1.firebasedatabase.app").getReference("Workouts").orderByChild("currentDate")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        List<String> values = new ArrayList<>();
 
                         for (DataSnapshot data: snapshot.getChildren()) {
                             Workout workout = data.getValue(Workout.class);
-                            values.add(workout.getCurrentDate());
+                            if (workout.getUserId().equals(mAuth.getUid())) {
+                                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                                String dateString = formatter.format(new Date(Long.parseLong(workout.getCurrentDate())));
+                                values.add(dateString);
+                            }
                         }
-                        workoutListAdapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1,
-                                values);
-                        workoutListView.setAdapter(workoutListAdapter);
+                        if (getActivity() != null) {
+                            Collections.reverse(values);
+                            workoutListAdapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1,
+                                    values);
+                            workoutListView.setAdapter(workoutListAdapter);
+                        }
                     }
 
                     @Override
@@ -115,7 +130,7 @@ public class HistoryFragment extends Fragment {
     }
 
     public void findWorkout(int pos) {
-        FirebaseDatabase.getInstance("https://finalyearproject-e1d79-default-rtdb.europe-west1.firebasedatabase.app").getReference("Workouts")
+        FirebaseDatabase.getInstance("https://finalyearproject-e1d79-default-rtdb.europe-west1.firebasedatabase.app").getReference("Workouts").orderByChild("currentDate")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -123,9 +138,11 @@ public class HistoryFragment extends Fragment {
 
                         for (DataSnapshot data: snapshot.getChildren()) {
                             Workout wk = data.getValue(Workout.class);
-                            allWorkouts.add(wk);
+                            if (wk.getUserId().equals(mAuth.getUid())) {
+                                allWorkouts.add(wk);
+                                Collections.reverse(allWorkouts);
+                            }
                         }
-                        Log.i("Workouts: ", "size " + allWorkouts.size());
                         for (int i=0; i <= allWorkouts.size(); i++) {
                             if (i == pos) {
                                 Log.i("Workouts: ", "size " + allWorkouts.get(i).getId());
@@ -138,7 +155,9 @@ public class HistoryFragment extends Fragment {
                         WorkoutDetailsFragment fragment = new WorkoutDetailsFragment();
                         fragment.setArguments(bundle);
 
-                        getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                        if (getActivity() != null) {
+                            getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                        }
                     }
 
                     @Override

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -95,30 +93,34 @@ public class WorkoutDetailsFragment extends Fragment {
 
                         for (DataSnapshot data: snapshot.getChildren()) {
                             Workout wk = data.getValue(Workout.class);
-                            if (wk.getId() == workoutId) {
+                            if (wk.getId().equals(workoutId)) {
                                 workout = wk;
                             }
                         }
-                        dateText.setText(workout.getCurrentDate());
-                        for (Exercise exercise: workout.getExerciseList()) {
-                            TableRow row = new TableRow(getActivity());
-                            TextView tv1 = new TextView(getActivity());
-                            tv1.setText(exercise.getExerciseName());
-                            TextView tv2 = new TextView(getActivity());
-                            String weight = exercise.getWeightUsed() + " KG";
-                            tv2.setText(weight);
-                            TextView tv3 = new TextView(getActivity());
-                            String reps = exercise.getRepsCompleted() + " reps";
-                            tv3.setText(reps);
-                            int paddingDp = 20;
-                            float density = getActivity().getResources().getDisplayMetrics().density;
-                            int paddingPixel = (int)(paddingDp * density);
-                            tv2.setPadding(paddingPixel,0,0,0);
-                            tv3.setPadding(paddingPixel,0,0,0);
-                            row.addView(tv1);
-                            row.addView(tv2);
-                            row.addView(tv3);
-                            table.addView(row);
+                        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                        String dateString = formatter.format(new Date(Long.parseLong(workout.getCurrentDate())));
+                        dateText.setText(dateString);
+                        if(getActivity() != null){
+                            for (Exercise exercise: workout.getExerciseList()) {
+                                TableRow row = new TableRow(getActivity());
+                                TextView tv1 = new TextView(getActivity());
+                                tv1.setText(exercise.getExerciseName());
+                                TextView tv2 = new TextView(getActivity());
+                                String weight = exercise.getWeightUsed() + " KG";
+                                tv2.setText(weight);
+                                TextView tv3 = new TextView(getActivity());
+                                String reps = exercise.getRepsCompleted() + " reps";
+                                tv3.setText(reps);
+                                int paddingDp = 20;
+                                float density = getActivity().getResources().getDisplayMetrics().density;
+                                int paddingPixel = (int)(paddingDp * density);
+                                tv2.setPadding(paddingPixel,0,0,0);
+                                tv3.setPadding(paddingPixel,0,0,0);
+                                row.addView(tv1);
+                                row.addView(tv2);
+                                row.addView(tv3);
+                                table.addView(row);
+                            }
                         }
                     }
 
