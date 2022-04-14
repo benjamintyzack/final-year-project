@@ -30,7 +30,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
     private String mParam1;
     private String mParam2;
 
-    private Button signOutButton, changePasswordButton, deleteAccountButton;
+    private Button signOutButton, deleteAccountButton;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -70,7 +70,6 @@ public class SettingsFragment extends Fragment implements OnClickListener {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         signOutButton = view.findViewById(R.id.signOut);
-        changePasswordButton = view.findViewById(R.id.changePassword);
         deleteAccountButton = view.findViewById(R.id.deleteAccount);
 
         signOutButton.setOnClickListener(this);
@@ -88,16 +87,9 @@ public class SettingsFragment extends Fragment implements OnClickListener {
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(getActivity(), MainActivity.class));
                 break;
-            case R.id.changePassword:
-                changePassword();
-                break;
             case R.id.deleteAccount:
                 getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, new DeleteAccountFragment()).commit();
                 break;
         }
-    }
-
-    public void changePassword() {
-
     }
 }

@@ -16,4 +16,18 @@
         android:layout_height="400dip"
         android:layout_marginTop="50dp"/>
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="500dp"
+        android:text="1 Rep Max Estimate: " />
+
+    <TextView
+        android:id="@+id/oneRME"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="500dp"
+        android:layout_marginLeft="140dp" />
+
 </FrameLayout>

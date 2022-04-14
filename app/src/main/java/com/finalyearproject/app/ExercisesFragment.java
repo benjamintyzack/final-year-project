@@ -5,13 +5,13 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -45,6 +45,7 @@ public class ExercisesFragment extends Fragment {
 
     private Spinner exerciseSpinner;
     private GraphView lineGraphView;
+    private TextView oneRMEView;
 
     private FirebaseAuth mAuth;
 
@@ -86,6 +87,7 @@ public class ExercisesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_exercises, container, false);
 
         exerciseSpinner = view.findViewById(R.id.exerciseSpinner);
+        oneRMEView  = view.findViewById(R.id.oneRME);
         lineGraphView = view.findViewById(R.id.graph);
         lineGraphView.getViewport().setScalable(true);
         lineGraphView.getViewport().setScrollable(true);
@@ -153,6 +155,7 @@ public class ExercisesFragment extends Fragment {
 
     public void getExerciseData() {
         lineGraphView.removeAllSeries();
+        oneRMEView.setText("");
         if(!exerciseSpinner.getSelectedItem().toString().isEmpty()) {
             String exerciseName = exerciseSpinner.getSelectedItem().toString();
 
@@ -188,6 +191,7 @@ public class ExercisesFragment extends Fragment {
                                 series.setDrawDataPoints(true);
                             }
                             lineGraphView.addSeries(series);
+                            oneRMEView.setText(String.format("%.2f", calculateOneRME(exercises)));
                         }
 
                         @Override
@@ -199,9 +203,6 @@ public class ExercisesFragment extends Fragment {
     }
 
     public int getHighestWeight(int month, int currentYear, List<Exercise> exercises) {
-        Log.i("Exercises", "exercise" + exercises.get(0).getWeightUsed());
-        Log.i("Month", "month" + month);
-        Log.i("Year", "year" + currentYear);
         int highestWeight = 0;
         for (int i = 0; i < exercises.size(); i++) {
             Date exerciseDate = new Date(Long.parseLong(exercises.get(i).getCurrentDate()) * 1000);
@@ -216,5 +217,27 @@ public class ExercisesFragment extends Fragment {
             }
         }
         return highestWeight;
+    }
+
+    public double calculateOneRME(List<Exercise> exercises) {
+        double oneRME = 0;
+        double highestWeight = 0;
+        int reps = 0;
+        for (Exercise exercise : exercises) {
+            if(Double.parseDouble(exercise.getWeightUsed()) > oneRME) {
+                if (Integer.parseInt(exercise.getRepsCompleted()) == 1) {
+                    oneRME = Double.parseDouble(exercise.getWeightUsed());
+                    return oneRME;
+                }
+                highestWeight = Double.parseDouble(exercise.getWeightUsed());
+                reps = Integer.parseInt(exercise.getRepsCompleted());
+            }
+        }
+        double sumA = reps * 2.5;
+        double sumB = 100 - sumA; // % that the weight used represents of the theoretical 1RM
+        double sumC = sumB / 100; // The number to divide the weight used by to find out 1RM estimation
+        oneRME = highestWeight / sumC;
+
+        return oneRME;
     }
 }
