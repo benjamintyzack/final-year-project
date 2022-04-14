@@ -106,10 +106,10 @@ public class WorkoutDetailsFragment extends Fragment {
                                 TextView tv1 = new TextView(getActivity());
                                 tv1.setText(exercise.getExerciseName());
                                 TextView tv2 = new TextView(getActivity());
-                                String weight = exercise.getWeightUsed() + " KG";
+                                String weight = exercise.getWeightUsed().trim() + " KG";
                                 tv2.setText(weight);
                                 TextView tv3 = new TextView(getActivity());
-                                String reps = exercise.getRepsCompleted() + " reps";
+                                String reps = exercise.getRepsCompleted().trim() + " reps";
                                 tv3.setText(reps);
                                 int paddingDp = 20;
                                 float density = getActivity().getResources().getDisplayMetrics().density;

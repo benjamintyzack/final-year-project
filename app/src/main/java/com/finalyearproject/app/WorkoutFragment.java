@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -37,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Scanner;
 import java.util.UUID;
 
 /**
@@ -156,15 +158,31 @@ public class WorkoutFragment extends Fragment implements OnTouchListener, OnClic
             public void onResults(Bundle bundle) {
                 micButton.setImageResource(R.drawable.ic_baseline_mic_24);
                 ArrayList<String> data = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-                if (exerciseText.getText().toString().isEmpty()) {
-                    exerciseText.setText(data.get(0));
+                Log.i("Scanner data", "Data: " + data.get(0));
+                Scanner sc = new Scanner(data.get(0));
+                sc.useDelimiter("for | of");
+                int counter = 0;
+                while(sc.hasNext()) {
+                        if(counter == 0) {
+                            exerciseText.setText(sc.next());
+                            counter++;
+                        } else if(counter == 1) {
+                            repetitionText.setText(sc.next());
+                            counter++;
+                        } else if(counter == 2) {
+                            weightText.setText(sc.next());
+                        }
                 }
-                else if (!exerciseText.getText().toString().isEmpty() && weightText.getText().toString().isEmpty()) {
-                    weightText.setText(data.get(0));
-                }
-                else if (!exerciseText.getText().toString().isEmpty() && !weightText.getText().toString().isEmpty() && repetitionText.getText().toString().isEmpty()) {
-                    repetitionText.setText(data.get(0));
-                }
+                sc.close();
+//                if (exerciseText.getText().toString().isEmpty()) {
+//                    exerciseText.setText(data.get(0));
+//                }
+//                else if (!exerciseText.getText().toString().isEmpty() && weightText.getText().toString().isEmpty()) {
+//                    weightText.setText(data.get(0));
+//                }
+//                else if (!exerciseText.getText().toString().isEmpty() && !weightText.getText().toString().isEmpty() && repetitionText.getText().toString().isEmpty()) {
+//                    repetitionText.setText(data.get(0));
+//                }
             }
 
             @Override
