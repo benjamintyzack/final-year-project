@@ -1,5 +1,7 @@
 package com.finalyearproject.app;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -105,12 +107,18 @@ public class WorkoutDetailsFragment extends Fragment {
                                 TableRow row = new TableRow(getActivity());
                                 TextView tv1 = new TextView(getActivity());
                                 tv1.setText(exercise.getExerciseName());
+                                tv1.setTextColor(Color.parseColor("#000000"));
+                                tv1.setTypeface(null, Typeface.BOLD);
                                 TextView tv2 = new TextView(getActivity());
                                 String weight = exercise.getWeightUsed().trim() + " KG";
                                 tv2.setText(weight);
+                                tv2.setTextColor(Color.parseColor("#000000"));
+                                tv2.setTypeface(null, Typeface.BOLD);
                                 TextView tv3 = new TextView(getActivity());
                                 String reps = exercise.getRepsCompleted().trim() + " reps";
                                 tv3.setText(reps);
+                                tv3.setTextColor(Color.parseColor("#000000"));
+                                tv3.setTypeface(null, Typeface.BOLD);
                                 int paddingDp = 20;
                                 float density = getActivity().getResources().getDisplayMetrics().density;
                                 int paddingPixel = (int)(paddingDp * density);

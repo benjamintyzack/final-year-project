@@ -45,7 +45,7 @@ public class ExercisesFragment extends Fragment {
 
     private Spinner exerciseSpinner;
     private GraphView lineGraphView;
-    private TextView oneRMEView;
+    private TextView oneRMEView, highestWeightView, repCompletedView;
 
     private FirebaseAuth mAuth;
 
@@ -88,6 +88,8 @@ public class ExercisesFragment extends Fragment {
 
         exerciseSpinner = view.findViewById(R.id.exerciseSpinner);
         oneRMEView  = view.findViewById(R.id.oneRME);
+        highestWeightView = view.findViewById(R.id.exerciseHighestWeight);
+        repCompletedView = view.findViewById(R.id.repsCompletedFor);
         lineGraphView = view.findViewById(R.id.graph);
         lineGraphView.getViewport().setScalable(true);
         lineGraphView.getViewport().setScrollable(true);
@@ -237,6 +239,9 @@ public class ExercisesFragment extends Fragment {
         double sumB = 100 - sumA; // % that the weight used represents of the theoretical 1RM
         double sumC = sumB / 100; // The number to divide the weight used by to find out 1RM estimation
         oneRME = highestWeight / sumC;
+
+        highestWeightView.setText(String.format("%.2f", highestWeight));
+        repCompletedView.setText(String.valueOf(reps));
 
         return oneRME;
     }
