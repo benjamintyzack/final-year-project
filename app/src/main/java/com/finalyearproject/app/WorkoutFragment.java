@@ -64,6 +64,7 @@ public class WorkoutFragment extends Fragment implements OnTouchListener, OnClic
     private Button startWorkoutButton, addExerciseButton, endWorkoutButton;
     final Intent speechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
     private List<Exercise> exerciseList = new ArrayList<>();
+    private Workout workout;
 
     private FirebaseAuth mAuth;
 
@@ -174,15 +175,6 @@ public class WorkoutFragment extends Fragment implements OnTouchListener, OnClic
                         }
                 }
                 sc.close();
-//                if (exerciseText.getText().toString().isEmpty()) {
-//                    exerciseText.setText(data.get(0));
-//                }
-//                else if (!exerciseText.getText().toString().isEmpty() && weightText.getText().toString().isEmpty()) {
-//                    weightText.setText(data.get(0));
-//                }
-//                else if (!exerciseText.getText().toString().isEmpty() && !weightText.getText().toString().isEmpty() && repetitionText.getText().toString().isEmpty()) {
-//                    repetitionText.setText(data.get(0));
-//                }
             }
 
             @Override
@@ -249,6 +241,13 @@ public class WorkoutFragment extends Fragment implements OnTouchListener, OnClic
     }
 
     public void startWorkout() {
+        workout = new Workout();
+        workout.setId(UUID.randomUUID().toString());
+        workout.setUserId(mAuth.getCurrentUser().getUid());
+        Long tsLong2 = new Date().getTime();
+        String ts2 = tsLong2.toString();
+        workout.setCurrentDate(ts2);
+
         startWorkoutButton.setVisibility(GONE);
         addExerciseButton.setVisibility(VISIBLE);
         endWorkoutButton.setVisibility(VISIBLE);
@@ -259,14 +258,16 @@ public class WorkoutFragment extends Fragment implements OnTouchListener, OnClic
     public void saveExercise() {
         Exercise exercise = new Exercise();
         exercise.setExerciseName(exerciseText.getText().toString());
-        exercise.setWeightUsed(weightText.getText().toString());
-        exercise.setRepsCompleted(repetitionText.getText().toString());
+        exercise.setWeightUsed(weightText.getText().toString().trim());
+        exercise.setRepsCompleted(repetitionText.getText().toString().trim());
         exercise.setUserId(mAuth.getCurrentUser().getUid());
         Long tsLong = new Date().getTime();
         String ts = tsLong.toString();
         exercise.setCurrentDate(ts);
 
         exerciseList.add(exercise);
+        workout.setExerciseList(exerciseList);
+        updateWorkout(workout);
 
         exerciseText.getText().clear();
         weightText.getText().clear();
@@ -274,27 +275,26 @@ public class WorkoutFragment extends Fragment implements OnTouchListener, OnClic
     }
 
     public void endWorkout() {
-        Workout newWorkout = new Workout();
+        updateWorkout(workout);
+        startWorkoutButton.setVisibility(VISIBLE);
+        addExerciseButton.setVisibility(GONE);
+        endWorkoutButton.setVisibility(GONE);
+        micButton.setVisibility(GONE);
+        exerciseList.clear();
+    }
 
-        newWorkout.setId(UUID.randomUUID().toString());
-        newWorkout.setUserId(mAuth.getCurrentUser().getUid());
-        newWorkout.setExerciseList(exerciseList);
-        Long tsLong2 = new Date().getTime();
-        String ts2 = tsLong2.toString();
-        newWorkout.setCurrentDate(ts2);
-
+    public void updateWorkout(Workout workout) {
         FirebaseDatabase.getInstance("https://finalyearproject-e1d79-default-rtdb.europe-west1.firebasedatabase.app").getReference("Workouts")
-                .child(newWorkout.getId())
-                .setValue(newWorkout).addOnCompleteListener(task1 -> {
+                .child(workout.getId())
+                .setValue(workout).addOnCompleteListener(task1 -> {
             if (task1.isSuccessful()) {
-                Toast.makeText(getActivity(), "Workout Saved", Toast.LENGTH_LONG).show();
-                startWorkoutButton.setVisibility(VISIBLE);
-                addExerciseButton.setVisibility(GONE);
-                endWorkoutButton.setVisibility(GONE);
-                micButton.setVisibility(GONE);
-                exerciseList.clear();
+                if(getActivity() != null) {
+                    Toast.makeText(getActivity(), "Workout Updated", Toast.LENGTH_LONG).show();
+                }
             } else {
-                Toast.makeText(getActivity(), "Failed to save workout", Toast.LENGTH_LONG).show();
+                if(getActivity() != null) {
+                    Toast.makeText(getActivity(), "Failed to save workout", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }

@@ -180,7 +180,7 @@ public class ExercisesFragment extends Fragment {
                                 }
                             }
                             int x = 0;
-                            int y;
+                            double y;
                             int year = new Date().getYear();
                             LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
                             for (int i = 0; i < 12; i++) {
@@ -202,16 +202,16 @@ public class ExercisesFragment extends Fragment {
         }
     }
 
-    public int getHighestWeight(int month, int currentYear, List<Exercise> exercises) {
-        int highestWeight = 0;
+    public double getHighestWeight(int month, int currentYear, List<Exercise> exercises) {
+        double highestWeight = 0;
         for (int i = 0; i < exercises.size(); i++) {
             Date exerciseDate = new Date(Long.parseLong(exercises.get(i).getCurrentDate()));
             int exerciseMonth = exerciseDate.getMonth();
             int exerciseYear = exerciseDate.getYear();
             if(exerciseYear == currentYear) {
                 if(exerciseMonth == month) {
-                    if(Integer.parseInt(exercises.get(i).getWeightUsed().trim()) > highestWeight) {
-                        highestWeight = Integer.parseInt(exercises.get(i).getWeightUsed().trim());
+                    if(Double.parseDouble(exercises.get(i).getWeightUsed()) > highestWeight) {
+                        highestWeight = Double.parseDouble(exercises.get(i).getWeightUsed());
                     }
                 }
             }
@@ -225,12 +225,12 @@ public class ExercisesFragment extends Fragment {
         int reps = 0;
         for (Exercise exercise : exercises) {
             if(Double.parseDouble(exercise.getWeightUsed().trim()) > oneRME) {
-                if (Integer.parseInt(exercise.getRepsCompleted().trim()) == 1) {
-                    oneRME = Double.parseDouble(exercise.getWeightUsed().trim());
+                if (Integer.parseInt(exercise.getRepsCompleted()) == 1) {
+                    oneRME = Double.parseDouble(exercise.getWeightUsed());
                     return oneRME;
                 }
-                highestWeight = Double.parseDouble(exercise.getWeightUsed().trim());
-                reps = Integer.parseInt(exercise.getRepsCompleted().trim());
+                highestWeight = Double.parseDouble(exercise.getWeightUsed());
+                reps = Integer.parseInt(exercise.getRepsCompleted());
             }
         }
         double sumA = reps * 2.5;

@@ -76,7 +76,7 @@
         android:src="@drawable/ic_baseline_mic_24"
         android:visibility="gone"
         android:layout_marginTop="450dp"
-        android:layout_marginStart="70dp"/>
+        android:layout_marginStart="150dp"/>
 
     <Button
         android:id="@+id/startWorkout"
@@ -88,7 +88,7 @@
         android:textSize="24sp"
         android:textStyle="bold"
         android:layout_marginTop="400dp"
-        android:layout_marginStart="70dp"/>
+        android:layout_marginStart="60dp"/>
 
     <Button
         android:id="@+id/endWorkout"
@@ -115,5 +115,25 @@
         android:visibility="gone"
         android:layout_marginTop="500dp"
         android:layout_marginStart="70dp"/>
+
+    <TextView
+        android:id="@+id/info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="20dp"
+        android:textColor="#EE9700"
+        android:textStyle="bold"
+        android:text="INFO: Record message in this format" />
+
+    <TextView
+        android:id="@+id/infoMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="45dp"
+        android:textColor="#EE9700"
+        android:textStyle="bold"
+        android:text="Exercise name FOR Reps done OF Weight Used" />
 
 </FrameLayout>
