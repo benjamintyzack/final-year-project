@@ -93,6 +93,8 @@ public class ExercisesFragment extends Fragment {
         lineGraphView = view.findViewById(R.id.graph);
         lineGraphView.getViewport().setScalable(true);
         lineGraphView.getViewport().setScrollable(true);
+        lineGraphView.getGridLabelRenderer().setHorizontalAxisTitle("Month");
+        lineGraphView.getGridLabelRenderer().setVerticalAxisTitle("Highest Weight Used");
 
         lineGraphView.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
             @Override
