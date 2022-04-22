@@ -140,9 +140,9 @@ public class HistoryFragment extends Fragment {
                             Workout wk = data.getValue(Workout.class);
                             if (wk.getUserId().equals(mAuth.getUid())) {
                                 allWorkouts.add(wk);
-                                Collections.reverse(allWorkouts);
                             }
                         }
+                        Collections.reverse(allWorkouts);
                         for (int i=0; i <= allWorkouts.size(); i++) {
                             if (i == pos) {
                                 Log.i("Workouts: ", "size " + allWorkouts.get(i).getId());
